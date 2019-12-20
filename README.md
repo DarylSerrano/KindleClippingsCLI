@@ -6,6 +6,7 @@ CLI version of my [KindleClippings](https://github.com/DarylSerrano/KindleClippi
 ```bash
 kindle-clippings --help
 kindle-clippings -i "My Clippings.txt" -d "./clippings"
+kindle-clippings -i "clippings/clipp_short.txt" --org "book" -d "anki" -a
 ```
 ## Testing dev
 `npm run dev -- [args]`
