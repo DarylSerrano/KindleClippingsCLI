@@ -60,7 +60,7 @@ const args = yargs_1.default
 })
     .usage("Usage: $0  [options]")
     .example('kindle-clippings -i "My Clippings.txt" -d "./clippings"', "Parse information into a file in json on the directory ./clippings")
-    .epilog("For issue reporting and bugs: https://github.com/DaryKiri/KindleClippings/issues").argv;
+    .epilog("For issue reporting and bugs: https://github.com/DarylSerrano/KindleClippingsCLI/issues").argv;
 function executeCommand(args) {
     return __awaiter(this, void 0, void 0, function* () {
         const spinner = ora_1.default();

@@ -56,7 +56,7 @@ const args: Arguments = yargs
     "Parse information into a file in json on the directory ./clippings"
   )
   .epilog(
-    "For issue reporting and bugs: https://github.com/DaryKiri/KindleClippings/issues"
+    "For issue reporting and bugs: https://github.com/DarylSerrano/KindleClippingsCLI/issues"
   ).argv;
 
 async function executeCommand(args: Arguments) {

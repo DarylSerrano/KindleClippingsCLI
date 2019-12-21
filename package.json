@@ -1,6 +1,6 @@
 {
   "name": "kindle-clippings-cli",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "CLI that parses, organizes and export a MyClippings.txt file obtained from a Kindle into json or a anki deck",
   "main": "dist/index.js",
   "scripts": {
@@ -14,10 +14,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/DarylSerrano/KindleClippings"
+    "url": "git+https://github.com/DarylSerrano/KindleClippingsCLI"
   },
   "bugs": {
-    "url": "https://github.com/DarylSerrano/KindleClippings/issues"
+    "url": "https://github.com/DarylSerrano/KindleClippingsCLI/issues"
   },
   "keywords": [],
   "author": "Daryl Serrano Hipolito <darylserrano39@gmail.com>",
