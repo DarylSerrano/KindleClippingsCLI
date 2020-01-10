@@ -1,5 +1,6 @@
 # KindleClippingsCLI 
 [![npm version](https://badge.fury.io/js/kindle-clippings-cli.svg)](https://badge.fury.io/js/kindle-clippings-cli)
+<span class="badge-daviddm"><a href="https://david-dm.org/DarylSerrano/KindleClippingsCLI" title="View the status of this project's dependencies on DavidDM"><img src="https://david-dm.org/DarylSerrano/KindleClippingsCLI.svg" alt="Dependency Status" /></a></span>
 
 
 CLI version of my [KindleClippings](https://github.com/DarylSerrano/KindleClippings) package for parsing clippings made on the Kindle into json files or a anki deck. 
