@@ -1,39 +1,11 @@
-import { createWriteStream, writeFileSync } from "fs";
-import { Buffer } from "buffer";
-import * as stream from "stream";
-import { resolve } from "path";
-import { promisify } from "util";
-import { once } from "events";
-import { type } from "os";
+import fs from "fs";
+import path from "path";
 import {
   organizeKindleEntriesByAuthors,
   organizeKindleEntriesByBookTitle,
   KindleEntryParsed
 } from "@darylserrano/kindle-clippings";
-
-const finished = promisify(stream.finished);
-
-function convertKindleEntryToWritableData(
-  entry: KindleEntryParsed
-): Array<string> {
-  /*Author\tBookTitle\tContent\tDateofCreation\tlocation\tpage\ttype\tReading\tMeaning*/
-  let writableData: Array<string> = [];
-  writableData.push(entry.authors);
-  writableData.push("\t");
-  writableData.push(entry.bookTile);
-  writableData.push("\t");
-  writableData.push(entry.content);
-  writableData.push("\t");
-  writableData.push(entry.dateOfCreation);
-  writableData.push("\t");
-  writableData.push(entry.location);
-  writableData.push("\t");
-  writableData.push(entry.page.toString());
-  writableData.push("\t");
-  writableData.push(entry.type);
-  writableData.push("\n");
-  return writableData;
-}
+import stringify from "csv-stringify";
 
 // function convertTagsToWritableData(entry: KindleEntryParsed): Array<string> {
 //   let writableData: Array<string>;
@@ -50,13 +22,7 @@ export async function saveAll(
   pathToSave: string,
   filename?: string
 ) {
-  let data: Array<string> = [];
-  for (const entry of dataToSave) {
-    let kindleEntryData = convertKindleEntryToWritableData(entry);
-    data = data.concat(kindleEntryData);
-  }
-
-  await saveToAnkiFile(data, pathToSave, filename);
+  return await saveToAnkiFile(dataToSave, pathToSave, filename);
 }
 
 export async function saveByAuthor(
@@ -65,13 +31,10 @@ export async function saveByAuthor(
 ) {
   let organizedByAuthors = organizeKindleEntriesByAuthors(dataToSave);
   organizedByAuthors.forEach(async (kindleEntries, authors) => {
-    let data: Array<string> = [];
-    for (const entry of kindleEntries) {
-      let kindleEntryData = convertKindleEntryToWritableData(entry);
-      data = data.concat(kindleEntryData);
-    }
-    await saveToAnkiFile(data, pathToSave, `${authors}.tsv`);
+    await saveToAnkiFile(kindleEntries, pathToSave, `${authors}.tsv`);
   });
+
+  return pathToSave;
 }
 
 export async function saveByBookTitle(
@@ -80,41 +43,51 @@ export async function saveByBookTitle(
 ) {
   let organizedByBookTitle = organizeKindleEntriesByBookTitle(dataToSave);
   organizedByBookTitle.forEach(async (kindleEntries, bookTile) => {
-    let data: Array<string> = [];
-    for (const entry of kindleEntries) {
-      let kindleEntryData = convertKindleEntryToWritableData(entry);
-      data = data.concat(kindleEntryData);
-    }
-    await saveToAnkiFile(data, pathToSave, `${bookTile}.tsv`);
+    await saveToAnkiFile(kindleEntries, pathToSave, `${bookTile}.tsv`);
   });
+
+  return pathToSave;
 }
 
 async function saveToAnkiFile(
-  data: Array<string>,
+  data: Array<KindleEntryParsed>,
   pathToSave: string,
   filename?: string
-) {
-  let outPath = resolve(pathToSave, filename ? filename : "out.tsv");
-  if (
-    type()
-      .toLowerCase()
-      .includes("win") ||
-    type()
-      .toLowerCase()
-      .includes("windows")
-  ) {
-    let dataString = "".concat(...data);
-    writeFileSync(outPath, dataString);
-  } else {
-    const outWrittable = createWriteStream(outPath);
-    data.push("\r\n"); // CRLF
-    for (const chunk of data) {
-      if (!outWrittable.write(chunk)) {
-        await once(outWrittable, "drain");
-      }
-    }
+): Promise<string> {
 
-    outWrittable.end();
-    await finished(outWrittable);
-  }
+  let outPath = path.resolve(pathToSave, filename ? filename : "out.tsv");
+  let ankiDeckData = data.map((kindleEntry) => {
+    return kindleEntry.toJSON();
+  });
+
+  return new Promise((resolve, reject) => {
+    const outStream = fs.createWriteStream(outPath, {
+      flags: "w"
+    });
+    
+    let dataStream = stringify(ankiDeckData, {
+      delimiter: "\t",
+      columns: ["authors", "bookTile", "page", "location", "dateOfCreation", "content", "type"],
+      header: false,
+      cast: {
+        string: function(value) {
+          return value.toString().replace(/"/g, "'");
+        }
+      }
+    });
+
+    outStream.on("error", function(err) {
+      reject(err);
+    });
+
+    outStream.on("finish", function() {
+      resolve(outPath);
+    });
+
+    dataStream.on("error", function(err) {
+      reject(err);
+    });
+
+    dataStream.pipe(outStream);
+  });
 }
