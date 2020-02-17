@@ -54,9 +54,8 @@ async function saveToAnkiFile(
   pathToSave: string,
   filename?: string
 ): Promise<string> {
-
   let outPath = path.resolve(pathToSave, filename ? filename : "out.tsv");
-  let ankiDeckData = data.map((kindleEntry) => {
+  let ankiDeckData = data.map(kindleEntry => {
     return kindleEntry.toJSON();
   });
 
@@ -64,10 +63,18 @@ async function saveToAnkiFile(
     const outStream = fs.createWriteStream(outPath, {
       flags: "w"
     });
-    
+
     let dataStream = stringify(ankiDeckData, {
       delimiter: "\t",
-      columns: ["authors", "bookTile", "page", "location", "dateOfCreation", "content", "type"],
+      columns: [
+        "authors",
+        "bookTile",
+        "page",
+        "location",
+        "dateOfCreation",
+        "content",
+        "type"
+      ],
       header: false,
       cast: {
         string: function(value) {

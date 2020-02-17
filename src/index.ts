@@ -68,7 +68,11 @@ async function executeCommand(args: Arguments) {
       case "all":
         spinner.start(`Saving data into path: ${resolve(args.outDir)}`);
         if (args.anki) {
-          pathSaved = await anki.saveAll(entriesParsed, args.outDir, args.outFile);
+          pathSaved = await anki.saveAll(
+            entriesParsed,
+            args.outDir,
+            args.outFile
+          );
         } else {
           pathSaved = await io.saveAll(
             entriesParsed,
@@ -83,10 +87,14 @@ async function executeCommand(args: Arguments) {
           `Saving data by author into path ${resolve(args.outDir)}`
         );
         if (args.anki) {
-          pathSaved =  await anki.saveByAuthor(entriesParsed, args.outDir);
+          pathSaved = await anki.saveByAuthor(entriesParsed, args.outDir);
           console.log(`Saved: ${pathSaved}`);
         } else {
-          pathSaved =  await io.saveByAuthor(entriesParsed, args.outDir, args.pretty);
+          pathSaved = await io.saveByAuthor(
+            entriesParsed,
+            args.outDir,
+            args.pretty
+          );
           console.log(`Saved: ${pathSaved}`);
         }
         break;
@@ -95,9 +103,13 @@ async function executeCommand(args: Arguments) {
           `Saving data by book title into path ${resolve(args.outDir)}`
         );
         if (args.anki) {
-          pathSaved =  await anki.saveByBookTitle(entriesParsed, args.outDir);
+          pathSaved = await anki.saveByBookTitle(entriesParsed, args.outDir);
         } else {
-          pathSaved =  await io.saveByBookTitle(entriesParsed, args.outDir, args.pretty);
+          pathSaved = await io.saveByBookTitle(
+            entriesParsed,
+            args.outDir,
+            args.pretty
+          );
         }
         break;
       default:

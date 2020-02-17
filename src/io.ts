@@ -1,6 +1,5 @@
-import { promises, writeFileSync } from "fs";
+import { promises } from "fs";
 import { resolve } from "path";
-import { type } from "os";
 import {
   readKindleClipping,
   parseKindleEntries,
