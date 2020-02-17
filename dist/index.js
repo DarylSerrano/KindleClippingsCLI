@@ -66,38 +66,42 @@ function executeCommand(args) {
         const spinner = ora_1.default();
         try {
             let entriesParsed = yield io.getAllEntriesParsed(args.inFile);
+            let pathSaved;
             switch (args.orgType) {
                 case "all":
                     spinner.start(`Saving data into path: ${path_1.resolve(args.outDir)}`);
                     if (args.anki) {
-                        yield anki.saveAll(entriesParsed, args.outDir, args.outFile);
+                        pathSaved = yield anki.saveAll(entriesParsed, args.outDir, args.outFile);
                     }
                     else {
-                        yield io.saveAll(entriesParsed, args.outDir, args.outFile, args.pretty);
+                        pathSaved = yield io.saveAll(entriesParsed, args.outDir, args.outFile, args.pretty);
                     }
                     break;
                 case "authors":
                     spinner.start(`Saving data by author into path ${path_1.resolve(args.outDir)}`);
                     if (args.anki) {
-                        yield anki.saveByAuthor(entriesParsed, args.outDir);
+                        pathSaved = yield anki.saveByAuthor(entriesParsed, args.outDir);
+                        console.log(`Saved: ${pathSaved}`);
                     }
                     else {
-                        yield io.saveByAuthor(entriesParsed, args.outDir, args.pretty);
+                        pathSaved = yield io.saveByAuthor(entriesParsed, args.outDir, args.pretty);
+                        console.log(`Saved: ${pathSaved}`);
                     }
                     break;
                 case "book":
                     spinner.start(`Saving data by book title into path ${path_1.resolve(args.outDir)}`);
                     if (args.anki) {
-                        yield anki.saveByBookTitle(entriesParsed, args.outDir);
+                        pathSaved = yield anki.saveByBookTitle(entriesParsed, args.outDir);
                     }
                     else {
-                        yield io.saveByBookTitle(entriesParsed, args.outDir, args.pretty);
+                        pathSaved = yield io.saveByBookTitle(entriesParsed, args.outDir, args.pretty);
                     }
                     break;
                 default:
                     console.error(`No valid orgType: ${args}`);
-                    break;
+                    process.exit(1);
             }
+            console.log(`\nSaved: ${pathSaved}`);
             process.exit(0);
         }
         catch (err) {

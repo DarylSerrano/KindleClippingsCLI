@@ -63,14 +63,18 @@ async function executeCommand(args: Arguments) {
   const spinner = ora();
   try {
     let entriesParsed = await io.getAllEntriesParsed(args.inFile);
-
+    let pathSaved: string;
     switch (args.orgType) {
       case "all":
         spinner.start(`Saving data into path: ${resolve(args.outDir)}`);
         if (args.anki) {
-          await anki.saveAll(entriesParsed, args.outDir, args.outFile);
+          pathSaved = await anki.saveAll(
+            entriesParsed,
+            args.outDir,
+            args.outFile
+          );
         } else {
-          await io.saveAll(
+          pathSaved = await io.saveAll(
             entriesParsed,
             args.outDir,
             args.outFile,
@@ -83,9 +87,15 @@ async function executeCommand(args: Arguments) {
           `Saving data by author into path ${resolve(args.outDir)}`
         );
         if (args.anki) {
-          await anki.saveByAuthor(entriesParsed, args.outDir);
+          pathSaved = await anki.saveByAuthor(entriesParsed, args.outDir);
+          console.log(`Saved: ${pathSaved}`);
         } else {
-          await io.saveByAuthor(entriesParsed, args.outDir, args.pretty);
+          pathSaved = await io.saveByAuthor(
+            entriesParsed,
+            args.outDir,
+            args.pretty
+          );
+          console.log(`Saved: ${pathSaved}`);
         }
         break;
       case "book":
@@ -93,15 +103,21 @@ async function executeCommand(args: Arguments) {
           `Saving data by book title into path ${resolve(args.outDir)}`
         );
         if (args.anki) {
-          await anki.saveByBookTitle(entriesParsed, args.outDir);
+          pathSaved = await anki.saveByBookTitle(entriesParsed, args.outDir);
         } else {
-          await io.saveByBookTitle(entriesParsed, args.outDir, args.pretty);
+          pathSaved = await io.saveByBookTitle(
+            entriesParsed,
+            args.outDir,
+            args.pretty
+          );
         }
         break;
       default:
         console.error(`No valid orgType: ${args}`);
-        break;
+        process.exit(1);
     }
+
+    console.log(`\nSaved: ${pathSaved}`);
 
     process.exit(0);
   } catch (err) {
