@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "test": "ts-node src/test.ts",
-    "build": "tsc",
+    "build": "npm run clean && tsc",
     "dev": "ts-node src/index.ts",
     "clean": "node clean.js"
   },
