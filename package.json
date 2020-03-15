@@ -4,7 +4,7 @@
   "description": "CLI that parses, organizes and export a MyClippings.txt file obtained from a Kindle into json or a anki deck",
   "main": "dist/index.js",
   "scripts": {
-    "test": "ts-node src/test.ts",
+    "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npm run clean && tsc",
     "dev": "ts-node src/index.ts",
     "clean": "node clean.js"
