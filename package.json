@@ -1,6 +1,6 @@
 {
   "name": "kindle-clippings-cli",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "CLI that parses, organizes and export a MyClippings.txt file obtained from a Kindle into json or a anki deck",
   "main": "dist/index.js",
   "scripts": {
