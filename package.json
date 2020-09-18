@@ -1,6 +1,6 @@
 {
   "name": "kindle-clippings-cli",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "CLI that parses, organizes and export a MyClippings.txt file obtained from a Kindle into json or a anki deck",
   "main": "dist/index.js",
   "scripts": {
@@ -24,7 +24,7 @@
   "license": "MIT",
   "types": "dist/index.d.ts",
   "dependencies": {
-    "@darylserrano/kindle-clippings": "^2.1.3",
+    "@darylserrano/kindle-clippings": "^2.1.5",
     "csv": "^5.3.1",
     "csv-stringify": "^5.3.6",
     "ora": "^4.0.3",
